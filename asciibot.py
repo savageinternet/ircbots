@@ -1,3 +1,4 @@
+import time
 import urllib
 import urllib2
 
@@ -31,7 +32,9 @@ class AsciiBot(BaseBot):
     print photo_url
     art = self.get_ascii_for_URL(photo_url)
     print art
-    connection.privmsg(target, art)
+    for line in art.split('\n'):
+        connection.privmsg(target, line)
+        time.sleep(.34)
 
 if __name__ == '__main__':
     options, args = parseArgs()

@@ -1,6 +1,7 @@
 from ircbot import SingleServerIRCBot
 from irclib import nm_to_n
 from optparse import OptionParser
+import re
 import sys
 
 class BaseBot(SingleServerIRCBot):
@@ -12,6 +13,10 @@ class BaseBot(SingleServerIRCBot):
         options.nick)
     self._nick = options.nick
     self._channels_to_join = [c.lower() for c in options.channels]
+    if options.signal:
+        self._signal = options.signal
+    else:
+        self._signal = self._nick + ':'
 
   def quit(self):
     self.connection.disconnect('bye')
@@ -31,11 +36,13 @@ class BaseBot(SingleServerIRCBot):
 
   def on_pubmsg(self, c, e):
     message = e.arguments()[0].strip()
-    signal = self._nick + ':'
-    if not message.startswith(signal):
+    if not re.match(self._signal, message):
       return
-    message_without_signal = message[len(signal):].strip()
-    self._act(c, e.target(), message_without_signal)
+    if self._signal == self._nick + ':':
+        message_without_signal = message[len(self._signal):].strip()
+        self._act(c, e.target(), message_without_signal)
+    else:
+        self._act(c, e.target(), message)
 
 def startBot(bot_class, options):
   bot = bot_class(options)
@@ -53,6 +60,7 @@ def parseArgs(parser=OptionParser()):
   parser.add_option('--port', dest='port', type='int',
       help='port to connect to')
   parser.add_option('--nick', dest='nick', help='nick to join with')
+  parser.add_option('--signal', dest='signal', help='regexp to match messages to listen to, default ^nick:')
   parser.add_option('--channel', dest='channels', action='append',
       help='channels to join')
   options, args = parser.parse_args()
