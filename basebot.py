@@ -52,8 +52,7 @@ def parseArgs(parser=OptionParser()):
   parser.add_option('--host', dest='host', help='host to connect to')
   parser.add_option('--port', dest='port', type='int',
       help='port to connect to')
-  parser.add_option('--nick', dest='nick', default='locationbot',
-      help='nick to join with')
+  parser.add_option('--nick', dest='nick', help='nick to join with')
   parser.add_option('--channel', dest='channels', action='append',
       help='channels to join')
   options, args = parser.parse_args()
