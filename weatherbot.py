@@ -15,7 +15,6 @@ class WeatherBot(BaseBot):
     f = urllib2.urlopen(url)
     try:
       xml = f.read()
-      print xml
       root = parseString(xml)
       forecast_information = root.getElementsByTagName(
           'forecast_information')[0]
