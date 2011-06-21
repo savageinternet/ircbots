@@ -1,25 +1,23 @@
-import mechanize
 import urllib
+import urllib2
 
 import tools.flickr as flickr
 
 from basebot import BaseBot, startBot, parseArgs
 
-ASCII_CONVERSION_URL = 'http://www.glassgiant.com/ascii/'
+ASCII_CONVERSION_URL = 'http://www.glassgiant.com/ascii/ascii.php'
 
 class AsciiBot(BaseBot):
   def get_picture_url_from_flickr_result(self, result):
       return result.getSmall()
 
   def get_ascii_for_URL(self, url):
-    browser = mechanize.Browser()
-    browser.open(ASCII_CONVERSION_URL)
-    for form in browser.forms():
-        ascii_art_form = form
-    browser.form = ascii_art_form
-    browser['webaddress'] = url
-    response = browser.submit()
-    image = response.read().split('<font face="monospace, Courier" size = "1" color = "000000">')[1]
+    params = urllib.urlencode({'webaddress' : url})
+    ascii_url = '{0}?{1}'.format(ASCII_CONVERSION_URL, params)
+    f = urllib2.urlopen(ascii_url)
+    html = f.read()
+    f.close()
+    image = html.split('<font face="monospace, Courier" size = "1" color = "000000">')[1]
     image = image.split('</font>')[0]
     image = image.replace('&nbsp;', ' ')
     image = image.replace('<br>', '\n')
