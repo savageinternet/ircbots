@@ -1,0 +1,7 @@
+make eventbot use a calendar (google calendar api)
+write memebot
+write scorebot
+write drink recipe bot
+write regular recipe bot (recipe queue via google docs api)
+
+combine bots into a single bot so as to not overrun chat room
