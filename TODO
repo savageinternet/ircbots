@@ -1,6 +1,8 @@
 make eventbot use a calendar (google calendar api)
 write memebot
 write scorebot
+write dictionarybot
+write fortunebot
 write drink recipe bot
 write regular recipe bot (recipe queue via google docs api)
 
